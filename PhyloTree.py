@@ -121,6 +121,21 @@ def whichRow(leaf_group):
     row_loc=leaf_group[0] if leaf_group[0]<leaf_group[1] else leaf_group
     return row_loc
 
+# Update dictionary with a key and values for each taxa or leaf
+def updateDict(dictionary, shortest_dist, leaf_list): 
+    tmp_list = []
+    #check to see if there is the same key in the dictionary
+    if shortest_dist in dictionary:
+        #if there is the same key then we make a nested list
+        tmp_list.append(dictionary.get(shortest_dist))
+        tmp_list.append(leaf_list)
+        dictionary[shortest_dist] = tmp_list
+    else: 
+        #add a new leaf list to the dictionary
+        dictionary[shortest_dist] = leaf_list
+
+    return dictionary
+
 def main():
     keepGoing = True
 #     #Step 1. decide the shortest distance value in the matrix
@@ -196,14 +211,19 @@ def main():
     matrix_2= matrix
     matrix_2 = matrix_2.copy()
     leaf_list = []
+    leaf_dict = {}
 
     while(keepGoing == True): 
 
         #if len(leaf_list) == 0:
         #Step 1. Find the min value. But first check if the 
         shortest_dist = minVal(matrix)
+
         #Step 2. find the row x col that has that min value from the matrix
         leaf_list = leavesReturn(matrix, shortest_dist)
+
+        print(updateDict(leaf_dict, shortest_dist, leaf_list))
+
         #Step 3. Calculate the average distance from the row x col (cluser value)
         #        Return the new row to be inserted
         new_row = updateRow(matrix,leaf_list)
@@ -217,7 +237,6 @@ def main():
         # print(matrix)
 
         #Step 6. Check if when we only have 2 clusters in the matrix
-        print(len(matrix), len(matrix[0]))
         keepGoing = False if len(matrix) <= 2 and len(matrix[0]) <= 2 else True
 
     print(matrix)

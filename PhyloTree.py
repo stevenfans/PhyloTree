@@ -1,4 +1,5 @@
 import statistics
+import string
 # create matrix for animals
 #Sharks, rays, amphibians
 #sharks
@@ -136,6 +137,15 @@ def updateDict(dictionary, shortest_dist, leaf_list):
 
     return dictionary
 
+# enumuerate all the values in rows of the matrix to become distinctive letters
+# and return a list that has those letters to represent different species
+def letToNum(matrix): 
+    letter_list = list()
+    for num, letter in zip(range(len(matrix)), string.ascii_uppercase):
+        # print(num, letter)
+        letter_list.append(letter)
+    return letter_list
+
 def main():
     keepGoing = True
 #     #Step 1. decide the shortest distance value in the matrix
@@ -212,6 +222,8 @@ def main():
     matrix_2 = matrix_2.copy()
     leaf_list = []
     leaf_dict = {}
+
+    print(letToNum(matrix))
 
     while(keepGoing == True): 
 

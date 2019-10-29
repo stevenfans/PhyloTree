@@ -11,14 +11,14 @@ import string
 #                  [None, None, 4],
 #                  [None, None, None]]
 
-matrix = [[None,    9,    2,    4,    9,   10],
-          [None, None,    9,    6,    2,   10],
-          [None, None, None,    5,    9,   10],
-          [None, None, None, None,    6,   10],
-          [None, None, None, None, None,   10], 
-          [None, None, None, None, None, None]]
+# matrix = [[None,    9,    2,    4,    9,   10],
+#           [None, None,    9,    6,    2,   10],
+#           [None, None, None,    5,    9,   10],
+#           [None, None, None, None,    6,   10],
+#           [None, None, None, None, None,   10], 
+#           [None, None, None, None, None, None]]
 
-matrix_2= []                 
+# matrix_2= []                 
 
 #function determines the lowest element in the matrix
 def minVal(animal_matrix): 
@@ -71,7 +71,7 @@ def noneTo0(value):
     else: 
         return value
 
-#update the new matrix
+#update the new matrix by putting None where ever needed 
 def updateRow(matrix, leaf_group):
    row_list = list()
    #check the leaf_group and the next cells next to it and update new matrix
@@ -85,6 +85,7 @@ def updateRow(matrix, leaf_group):
        row_list.sort(key=lambda k: k!=None)
    return row_list
 
+# place the new row value where the old one was
 def makeMatrix(matrix,leaf_group,new_row,row_location): 
     #first delete a row and column from the old matrix
     new_matrix = delRowCol(matrix,leaf_group)
@@ -141,10 +142,33 @@ def updateDict(dictionary, shortest_dist, leaf_list):
 # and return a list that has those letters to represent different species
 def letToNum(matrix): 
     letter_list = list()
-    for num, letter in zip(range(len(matrix)), string.ascii_uppercase):
-        # print(num, letter)
-        letter_list.append(letter)
+    for num_letter in zip(range(len(matrix)), string.ascii_uppercase):
+        letter_list.append(num_letter[1])
     return letter_list
+
+# check for which rows or specie can become combined as one cluster
+# return the new list
+def updateSpeciesList(species_list, matrix, shortest_dist):
+    #create an empty list that will store two elements  for clusters
+    cluster = list()
+    isBreak = False
+
+    # look for the first shorteset distance in the matrix
+    for row in range(len(matrix)):
+        for col in range(len(matrix)):
+            if matrix[row][col] == shortest_dist:
+                #add the row and colum to the list
+                cluster.append(species_list[row])
+                cluster.append(species_list[col])
+                #delete the row values in the species list
+                species_list.pop(col)
+                species_list.pop(row)
+                isBreak = True
+                break
+        if isBreak == True:
+            break
+    species_list.insert(row,cluster)
+    return species_list
 
 def main():
     keepGoing = True
@@ -209,8 +233,7 @@ def main():
 #     matrix2 = makeMatrix(matrix,leaf_list,new_row, row_loc)
 #     print(matrix2)
 
-#TODO: add a for while loop to the code
-#      make a master list that will hold all the leaves
+#TODO:  make a master list that will hold all the leaves
     matrix = [[None,    9,    2,    4,    9,   10],
               [None, None,    9,    6,    2,   10],
               [None, None, None,    5,    9,   10],
@@ -218,11 +241,13 @@ def main():
               [None, None, None, None, None,   10], 
               [None, None, None, None, None, None]]
 
-    matrix_2= matrix
-    matrix_2 = matrix_2.copy()
+    # matrix_2= matrix
+    # matrix_2 = matrix_2.copy()
     leaf_list = []
-    leaf_dict = {}
+    leaf_dict = {}      
+    species_list = []
 
+    species_list = letToNum(matrix)
     print(letToNum(matrix))
 
     while(keepGoing == True): 
@@ -233,8 +258,12 @@ def main():
 
         #Step 2. find the row x col that has that min value from the matrix
         leaf_list = leavesReturn(matrix, shortest_dist)
+        
+        #Step 3. Cluster species that have a short distance between them
+        species_list = updateSpeciesList(species_list, matrix, shortest_dist)
+        print(species_list)
 
-        print(updateDict(leaf_dict, shortest_dist, leaf_list))
+        # print(updateDict(leaf_dict, shortest_dist, leaf_list))
 
         #Step 3. Calculate the average distance from the row x col (cluser value)
         #        Return the new row to be inserted

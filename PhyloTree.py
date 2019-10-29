@@ -4,27 +4,13 @@ import string
 #Sharks, rays, amphibians
 #sharks
 #rays
-#amphibians
-
-# animal_matrix[row][col]
-# animal_matrix = [[None, 5, 5], 
-#                  [None, None, 4],
-#                  [None, None, None]]
-
-# matrix = [[None,    9,    2,    4,    9,   10],
-#           [None, None,    9,    6,    2,   10],
-#           [None, None, None,    5,    9,   10],
-#           [None, None, None, None,    6,   10],
-#           [None, None, None, None, None,   10], 
-#           [None, None, None, None, None, None]]
-
-# matrix_2= []                 
+#amphibians               
 
 #function determines the lowest element in the matrix
 def minVal(animal_matrix): 
     minVal = 999 #start minimum with first element
-    for row in range(len(animal_matrix)-1): 
-        for col in range(len(animal_matrix)-1): 
+    for row in range(len(animal_matrix)): 
+        for col in range(len(animal_matrix)): 
             if animal_matrix[row][col] != None:
                 if (animal_matrix[row][col] < minVal): 
                     minVal = animal_matrix[row][col]
@@ -171,88 +157,29 @@ def updateSpeciesList(species_list, matrix, shortest_dist):
     return species_list
 
 def main():
-    keepGoing = True
-#     #Step 1. decide the shortest distance value in the matrix
-#     shortest_dist = minVal(matrix)
+    # matrix = [[None,    9,    2,    4,    9,   10],
+    #           [None, None,    9,    6,    2,   10],
+    #           [None, None, None,    5,    9,   10],
+    #           [None, None, None, None,    6,   10],
+    #           [None, None, None, None, None,   10], 
+    #           [None, None, None, None, None, None]]
     
-#     #Step 2. find all the rows x cols that have that shortest distance
-#     leaf_list = leavesReturn(matrix,shortest_dist)
-#     # print(leaf_list)
- 
-#     #Step 3. need to get the average values and then update a new matrix
-#     new_row = updateRow(matrix,leaf_list)
-#     # print(new_row)
+    matrix = [[None,    1,    2,    4,    4,    4,   4],
+              [None, None,    1,    3,    3,    3,   3],
+              [None, None, None,    2,    2,    2,   2],
+              [None, None, None, None,    0,    2,   2],
+              [None, None, None, None, None,    2,   2],
+              [None, None, None, None, None, None,   0],
+              [None, None, None, None, None, None, None]]
 
-#     #Step 4. determine the location of where to place the new row
-#     row_loc = whichRow(leaf_list)
-#     # print(row_loc)
-
-#     # Step 5. put the new row into the matrix and update the new matrix
-#     matrix2 = makeMatrix(matrix,leaf_list,new_row, row_loc)
-#     # print(matrix2)
-
-#     #Step 1. find the min value
-#     # shortest_dist = minVal(matrix2)
-#     #print(shortest_dist)
-
-#     #Step 2. find row x col with value
-#     leaf_list = leavesReturn(matrix2,shortest_dist)
-#     # print('row and col: ', leaf_list)
-#     # print (matrix2)
-
-#     #Step 3. need to get average of the rows
-#     new_row = updateRow(matrix2,leaf_list)
-#     # print('New row: ', new_row)
-
-#    #Step 4. determine the location of where to place the new row
-#     row_loc = whichRow(leaf_list)
-#     # print(row_loc)
-
-#     # Step 5. put the new row into the matrix and update the new matrix
-#     matrix2 = makeMatrix(matrix,leaf_list,new_row, row_loc)
-#     # print(matrix2)
-
-# #     #Step 1. find the min value
-#     shortest_dist = minVal(matrix2)
-# #     #print(shortest_dist)
-
-# #     #Step 2. find row x col with value
-#     leaf_list = leavesReturn(matrix2,shortest_dist)
-# #     print('row and col: ', leaf_list)
-# #     print (matrix2)
-
-# #     #Step 3. need to get average of the rows
-#     new_row = updateRow(matrix2,leaf_list)
-# #     print('New row: ', new_row)
-
-# #    #Step 4. determine the location of where to place the new row
-#     row_loc = whichRow(leaf_list)
-# #     print(row_loc)
-
-# #     # Step 5. put the new row into the matrix and update the new matrix
-#     matrix2 = makeMatrix(matrix,leaf_list,new_row, row_loc)
-#     print(matrix2)
-
-#TODO:  make a master list that will hold all the leaves
-    matrix = [[None,    9,    2,    4,    9,   10],
-              [None, None,    9,    6,    2,   10],
-              [None, None, None,    5,    9,   10],
-              [None, None, None, None,    6,   10],
-              [None, None, None, None, None,   10], 
-              [None, None, None, None, None, None]]
-
-    # matrix_2= matrix
-    # matrix_2 = matrix_2.copy()
+    keepGoing = True
     leaf_list = []
-    leaf_dict = {}      
     species_list = []
 
     species_list = letToNum(matrix)
-    print(letToNum(matrix))
 
     while(keepGoing == True): 
 
-        #if len(leaf_list) == 0:
         #Step 1. Find the min value. But first check if the 
         shortest_dist = minVal(matrix)
 
@@ -261,26 +188,21 @@ def main():
         
         #Step 3. Cluster species that have a short distance between them
         species_list = updateSpeciesList(species_list, matrix, shortest_dist)
-        print(species_list)
 
-        # print(updateDict(leaf_dict, shortest_dist, leaf_list))
-
-        #Step 3. Calculate the average distance from the row x col (cluser value)
+        #Step 4. Calculate the average distance from the row x col (cluser value)
         #        Return the new row to be inserted
         new_row = updateRow(matrix,leaf_list)
 
-        #Step 4. determine the locaton of where to place the new row
-        #     row_loc = whichRow(leaf_list)
+        #Step 5. determine the locaton of where to place the new row
         row_loc = whichRow(leaf_list)
 
-        #Step 5. Put the new row into the matrix and update the old matrix
+        #Step 6. Put the new row into the matrix and update the old matrix
         matrix = makeMatrix(matrix,leaf_list,new_row, row_loc) 
-        # print(matrix)
-
-        #Step 6. Check if when we only have 2 clusters in the matrix
+        
+        #Step 7. Check if when we only have 2 clusters in the matrix
         keepGoing = False if len(matrix) <= 2 and len(matrix[0]) <= 2 else True
 
-    print(matrix)
+    print(species_list) 
 
 if __name__ == "__main__":
     main()
